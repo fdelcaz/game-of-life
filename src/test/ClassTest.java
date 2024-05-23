@@ -129,9 +129,9 @@ public class ClassTest {
     Grid initialGrid = new Grid(initialGridLines);
 
     ArrayList<String> expectedGridLines = new ArrayList<>();
-    expectedGridLines.add("...");
     expectedGridLines.add(".*.");
-    expectedGridLines.add("...");
+    expectedGridLines.add(".*.");
+    expectedGridLines.add(".*.");
     Grid expectedGrid = new Grid(expectedGridLines);
 
     initialGrid.nextMove();

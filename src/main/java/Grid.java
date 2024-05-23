@@ -71,10 +71,7 @@ public class Grid {
   private boolean isCellAliveAt(int x, int y) {
     try{
       char neighbour = gridLines.get(x).charAt(y);
-      if (neighbour == '*') {
-        return true;
-      }
-      return false;
+      return neighbour == '*';
     }catch (Exception e){ //Out of boundaries
       return false;
     }
