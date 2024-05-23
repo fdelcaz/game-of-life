@@ -20,41 +20,52 @@ public class Grid {
   }
 
   public void nextMove() {
-
-
     ArrayList<String> nextGenGridLines = new ArrayList<>(gridLines);
 
     for (int x = 0; x<gridLines.size(); x++) {
       for (int y = 0; y<gridLines.size(); y++) {
-        if (gridLines.get(x).charAt(y) == '*'){
-          //Count number of neighbours
-          int neighboursCount = 0;
-          //Upper row
-          int upperRowIndex = x-1;
-          neighboursCount = neighboursCount + (isCellAliveAt(upperRowIndex, y - 1) ? 1 : 0);
-          neighboursCount = neighboursCount + (isCellAliveAt(upperRowIndex, y) ? 1 : 0);
-          neighboursCount = neighboursCount + (isCellAliveAt(upperRowIndex, y + 1) ? 1 : 0);
-
-          //Middle row
-          upperRowIndex = x;
-          neighboursCount = neighboursCount + (isCellAliveAt(upperRowIndex , y - 1) ? 1 : 0);
-          neighboursCount = neighboursCount + (isCellAliveAt(upperRowIndex, y + 1) ? 1 : 0);
-
-          //Bottom row
-          upperRowIndex = x+1;
-          neighboursCount = neighboursCount + (isCellAliveAt(upperRowIndex, y-1) ? 1 : 0);
-          neighboursCount = neighboursCount + (isCellAliveAt(upperRowIndex, y) ? 1 : 0);
-          neighboursCount = neighboursCount + (isCellAliveAt(upperRowIndex, y+1) ? 1 : 0);
-
-          if (neighboursCount < 2 || neighboursCount > 3 ){
-            String newLine = nextGenGridLines.get(x).substring(0, y) + "."  + nextGenGridLines.get(x).substring(y+1);
-            nextGenGridLines.set(x, newLine);
-          }
-        }
+        getNextGenLines(x, y, nextGenGridLines);
       }
     }
 
     setGridLines(nextGenGridLines);
+  }
+
+  private void getNextGenLines(int x, int y, ArrayList<String> nextGenGridLines) {
+    int neighboursCount = 0;
+    neighboursCount = getNeighboursCount(x, y, neighboursCount);
+
+    if (gridLines.get(x).charAt(y) == '*'){
+      if (neighboursCount < 2 || neighboursCount > 3 ){
+        String newLine = nextGenGridLines.get(x).substring(0, y) + "."  + nextGenGridLines.get(x).substring(y +1);
+        nextGenGridLines.set(x, newLine);
+      }
+    }else{
+      if (neighboursCount == 3 ){
+        String newLine = nextGenGridLines.get(x).substring(0, y) + "*"  + nextGenGridLines.get(x).substring(y +1);
+        nextGenGridLines.set(x, newLine);
+      }
+    }
+  }
+
+  private int getNeighboursCount(int x, int y, int neighboursCount) {
+
+    int upperRowIndex = x -1;
+    neighboursCount = neighboursCount + (isCellAliveAt(upperRowIndex, y - 1) ? 1 : 0);
+    neighboursCount = neighboursCount + (isCellAliveAt(upperRowIndex, y) ? 1 : 0);
+    neighboursCount = neighboursCount + (isCellAliveAt(upperRowIndex, y + 1) ? 1 : 0);
+
+    //Middle row
+    upperRowIndex = x;
+    neighboursCount = neighboursCount + (isCellAliveAt(upperRowIndex, y - 1) ? 1 : 0);
+    neighboursCount = neighboursCount + (isCellAliveAt(upperRowIndex, y + 1) ? 1 : 0);
+
+    //Bottom row
+    upperRowIndex = x +1;
+    neighboursCount = neighboursCount + (isCellAliveAt(upperRowIndex, y -1) ? 1 : 0);
+    neighboursCount = neighboursCount + (isCellAliveAt(upperRowIndex, y) ? 1 : 0);
+    neighboursCount = neighboursCount + (isCellAliveAt(upperRowIndex, y +1) ? 1 : 0);
+    return neighboursCount;
   }
 
   private boolean isCellAliveAt(int x, int y) {
