@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ClassTest {
 
 	@Test
-	public void GridShouldBeBiggerThanOne() {
+	public void gridShouldBeBiggerThanOne() {
 
     ArrayList<String> gridLines = new ArrayList<>();
     gridLines.add(".");
@@ -18,14 +18,13 @@ public class ClassTest {
 	}
 
   @Test
-  public void CanCreateOneGridWithTwoByTwoSize() throws Exception {
+  public void canCreateOneGridWithTwoByTwoSize() throws Exception {
 
     ArrayList<String> gridLines = new ArrayList<>();
     gridLines.add("..");
     gridLines.add("..");
 
     Grid grid = new Grid(gridLines);
-
-//    assertEquals("Invalid grid size", exception.getMessage());
+    assertNotNull(grid.NextMove());
   }
 }

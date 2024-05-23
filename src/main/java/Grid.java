@@ -10,4 +10,10 @@ public class Grid {
     }
     this.gridLines = gridLines;
   }
+
+  public Grid NextMove() throws Exception {
+    ArrayList<String> content = new ArrayList<>();
+    content.add("...");
+    return new Grid(content);
+  }
 }
