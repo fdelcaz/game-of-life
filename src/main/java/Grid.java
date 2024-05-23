@@ -13,7 +13,18 @@ public class Grid {
 
   public Grid NextMove() throws Exception {
     ArrayList<String> content = new ArrayList<>();
-    content.add("...");
+    content.add("..");
+    content.add("..");
     return new Grid(content);
+  }
+
+  public ArrayList<String> getGridLines() {
+    return gridLines;
+  }
+
+  public void print() {
+    for (String line : gridLines) {
+      System.out.println(line);
+    }
   }
 }

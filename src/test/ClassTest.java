@@ -18,13 +18,18 @@ public class ClassTest {
 	}
 
   @Test
-  public void canCreateOneGridWithTwoByTwoSize() throws Exception {
+  public void cannotCreateLifeIfThereIsNoPreviousAliveCells() throws Exception {
 
     ArrayList<String> gridLines = new ArrayList<>();
     gridLines.add("..");
     gridLines.add("..");
+    Grid initialGrid = new Grid(gridLines);
+    initialGrid = initialGrid.NextMove();
 
-    Grid grid = new Grid(gridLines);
-    assertNotNull(grid.NextMove());
+    Grid expectedGrid = new Grid(gridLines);
+
+    initialGrid.print();
+    expectedGrid.print();
+    assertEquals(expectedGrid.getGridLines(),initialGrid.getGridLines());
   }
 }
