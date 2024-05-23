@@ -137,4 +137,22 @@ public class ClassTest {
     initialGrid.nextMove();
     assertEquals(expectedGrid.getGridLines(),initialGrid.getGridLines());
   }
+
+  @Test
+  public void aCellWithMoreThanThreeNeighboursDies() throws Exception {
+    ArrayList<String> initialGridLines = new ArrayList<>();
+    initialGridLines.add(".*.");
+    initialGridLines.add("***");
+    initialGridLines.add(".*.");
+    Grid initialGrid = new Grid(initialGridLines);
+
+    ArrayList<String> expectedGridLines = new ArrayList<>();
+    expectedGridLines.add(".*.");
+    expectedGridLines.add("*.*");
+    expectedGridLines.add(".*.");
+    Grid expectedGrid = new Grid(expectedGridLines);
+
+    initialGrid.nextMove();
+    assertEquals(expectedGrid.getGridLines(),initialGrid.getGridLines());
+  }
 }

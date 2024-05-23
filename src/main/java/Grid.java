@@ -46,15 +46,10 @@ public class Grid {
           neighboursCount = neighboursCount + (isCellAliveAt(upperRowIndex, y) ? 1 : 0);
           neighboursCount = neighboursCount + (isCellAliveAt(upperRowIndex, y+1) ? 1 : 0);
 
-          if (neighboursCount < 2 ){
+          if (neighboursCount < 2 || neighboursCount > 3 ){
             String newLine = nextGenGridLines.get(x).substring(0, y) + "."  + nextGenGridLines.get(x).substring(y+1);
             nextGenGridLines.set(x, newLine);
           }
-
-//          if (neighboursCount > 3 ){
-//            String newLine = gridLines.get(x).substring(0, x) + "."  + gridLines.get(x).substring(x+1);
-//            gridLines.set(x, newLine);
-//          }
         }
       }
     }
