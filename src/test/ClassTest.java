@@ -1,3 +1,4 @@
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class ClassTest {
     gridLines.add("..");
     gridLines.add("..");
     Grid initialGrid = new Grid(gridLines);
-    initialGrid = initialGrid.NextMove();
+    initialGrid.nextMove();
 
     Grid expectedGrid = new Grid(gridLines);
 
@@ -43,8 +44,61 @@ public class ClassTest {
     expectedGridLines.add("..");
     Grid expectedGrid = new Grid(expectedGridLines);
 
-    initialGrid = initialGrid.NextMove();
+    initialGrid.nextMove();
     assertEquals(expectedGrid.getGridLines(),initialGrid.getGridLines());
   }
 
+  @Disabled("Disabled as you cannot have more than 3 neighbours in a 2x2 grid")
+  @Test
+  public void checkCellDiesFromOverPopulation() throws Exception {
+    ArrayList<String> initialGridLines = new ArrayList<>();
+    initialGridLines.add("**");
+    initialGridLines.add("**");
+    Grid initialGrid = new Grid(initialGridLines);
+
+    ArrayList<String> expectedGridLines = new ArrayList<>();
+    expectedGridLines.add(".*");
+    expectedGridLines.add("**");
+    Grid expectedGrid = new Grid(expectedGridLines);
+
+    initialGrid.nextMove();
+    assertEquals(expectedGrid.getGridLines(),initialGrid.getGridLines());
+  }
+
+  @Disabled("Disabled as this is too complex. I prefer to start considering a few alive cells instead of a few dead ones")
+  @Test
+  public void checkCellDiesFromOverPopulationInThreeByThreeGrid() throws Exception {
+    ArrayList<String> initialGridLines = new ArrayList<>();
+    initialGridLines.add("***");
+    initialGridLines.add("***");
+    initialGridLines.add("***");
+    Grid initialGrid = new Grid(initialGridLines);
+
+    ArrayList<String> expectedGridLines = new ArrayList<>();
+    expectedGridLines.add("..*");
+    expectedGridLines.add("*.*");
+    expectedGridLines.add("*.*");
+    Grid expectedGrid = new Grid(expectedGridLines);
+
+    initialGrid.nextMove();
+    assertEquals(expectedGrid.getGridLines(),initialGrid.getGridLines());
+  }
+
+  @Test
+  public void cannotHaveAliveCellsIfThereWereNoAliveOnes() throws Exception {
+    ArrayList<String> initialGridLines = new ArrayList<>();
+    initialGridLines.add("...");
+    initialGridLines.add("...");
+    initialGridLines.add("...");
+    Grid initialGrid = new Grid(initialGridLines);
+
+    ArrayList<String> expectedGridLines = new ArrayList<>();
+    expectedGridLines.add("...");
+    expectedGridLines.add("...");
+    expectedGridLines.add("...");
+    Grid expectedGrid = new Grid(expectedGridLines);
+
+    initialGrid.nextMove();
+    assertEquals(expectedGrid.getGridLines(),initialGrid.getGridLines());
+  }
 }
