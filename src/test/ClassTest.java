@@ -1,7 +1,11 @@
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -84,93 +88,32 @@ public class ClassTest {
     assertEquals(expectedGrid.getGridLines(),initialGrid.getGridLines());
   }
 
-  @Test
-  public void cannotHaveAliveCellsIfThereWereNoAliveOnes() throws Exception {
-    ArrayList<String> initialGridLines = new ArrayList<>();
-    initialGridLines.add("...");
-    initialGridLines.add("...");
-    initialGridLines.add("...");
-    Grid initialGrid = new Grid(initialGridLines);
-
-    ArrayList<String> expectedGridLines = new ArrayList<>();
-    expectedGridLines.add("...");
-    expectedGridLines.add("...");
-    expectedGridLines.add("...");
-    Grid expectedGrid = new Grid(expectedGridLines);
-
-    initialGrid.nextMove();
-    assertEquals(expectedGrid.getGridLines(),initialGrid.getGridLines());
+  static Stream<TestData> provideTestData() {
+    return Stream.of(
+      new TestData(List.of("...", "...", "..."), List.of("...", "...", "...")),
+      new TestData(List.of("...", ".*.", "..."), List.of("...", "...", "...")),
+      new TestData(List.of("...", "***", "..."), List.of(".*.", ".*.", ".*.")),
+      new TestData(List.of(".*.", "***", ".*."), List.of("***", "*.*", "***")),
+      new TestData(List.of(".*.", "*.*", "..."), List.of(".*.", ".*.", "..."))
+    );
   }
 
-  @Test
-  public void aSingleAliveCellWilLDie() throws Exception {
-    ArrayList<String> initialGridLines = new ArrayList<>();
-    initialGridLines.add("...");
-    initialGridLines.add(".*.");
-    initialGridLines.add("...");
-    Grid initialGrid = new Grid(initialGridLines);
-
-    ArrayList<String> expectedGridLines = new ArrayList<>();
-    expectedGridLines.add("...");
-    expectedGridLines.add("...");
-    expectedGridLines.add("...");
-    Grid expectedGrid = new Grid(expectedGridLines);
-
+  @ParameterizedTest
+  @MethodSource("provideTestData")
+  public void testGrid(TestData data) throws Exception {
+    Grid initialGrid = new Grid(new ArrayList<>(data.initialGridLines));
     initialGrid.nextMove();
-    assertEquals(expectedGrid.getGridLines(),initialGrid.getGridLines());
+    Grid expectedGrid = new Grid(new ArrayList<>(data.expectedGridLines));
+    assertEquals(expectedGrid.getGridLines(), initialGrid.getGridLines());
   }
 
-  @Test
-  public void aSingleAliveCellWithTwoNeighboursSurvives() throws Exception {
-    ArrayList<String> initialGridLines = new ArrayList<>();
-    initialGridLines.add("...");
-    initialGridLines.add("***");
-    initialGridLines.add("...");
-    Grid initialGrid = new Grid(initialGridLines);
+  private static class TestData {
+    List<String> initialGridLines;
+    List<String> expectedGridLines;
 
-    ArrayList<String> expectedGridLines = new ArrayList<>();
-    expectedGridLines.add(".*.");
-    expectedGridLines.add(".*.");
-    expectedGridLines.add(".*.");
-    Grid expectedGrid = new Grid(expectedGridLines);
-
-    initialGrid.nextMove();
-    assertEquals(expectedGrid.getGridLines(),initialGrid.getGridLines());
-  }
-
-  @Test
-  public void aCellWithMoreThanThreeNeighboursDies() throws Exception {
-    ArrayList<String> initialGridLines = new ArrayList<>();
-    initialGridLines.add(".*.");
-    initialGridLines.add("***");
-    initialGridLines.add(".*.");
-    Grid initialGrid = new Grid(initialGridLines);
-
-    ArrayList<String> expectedGridLines = new ArrayList<>();
-    expectedGridLines.add("***");
-    expectedGridLines.add("*.*");
-    expectedGridLines.add("***");
-    Grid expectedGrid = new Grid(expectedGridLines);
-
-    initialGrid.nextMove();
-    assertEquals(expectedGrid.getGridLines(),initialGrid.getGridLines());
-  }
-
-  @Test
-  public void aDeadCellWithThreeAliveNeighboursBecomesAlive() throws Exception {
-    ArrayList<String> initialGridLines = new ArrayList<>();
-    initialGridLines.add(".*.");
-    initialGridLines.add("*.*");
-    initialGridLines.add("...");
-    Grid initialGrid = new Grid(initialGridLines);
-
-    ArrayList<String> expectedGridLines = new ArrayList<>();
-    expectedGridLines.add(".*.");
-    expectedGridLines.add(".*.");
-    expectedGridLines.add("...");
-    Grid expectedGrid = new Grid(expectedGridLines);
-
-    initialGrid.nextMove();
-    assertEquals(expectedGrid.getGridLines(),initialGrid.getGridLines());
+    TestData(List<String> initialGridLines, List<String> expectedGridLines) {
+      this.initialGridLines = initialGridLines;
+      this.expectedGridLines = expectedGridLines;
+    }
   }
 }
