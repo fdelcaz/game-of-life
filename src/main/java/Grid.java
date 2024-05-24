@@ -56,17 +56,32 @@ public class Grid {
     int neighboursCount = 0;
     neighboursCount = getNeighboursCount(x, y, neighboursCount);
 
-    if (gridLines.get(x).charAt(y) == '*'){
-      if (neighboursCount < 2 || neighboursCount > 3 ){
-        String newLine = nextGenGridLines.get(x).substring(0, y) + "."  + nextGenGridLines.get(x).substring(y +1);
-        nextGenGridLines.set(x, newLine);
+    if (cellIsAlive(x, y)){
+      if (hasTooFewNeighbours(neighboursCount) || hasTooManyNeighbours(neighboursCount)){
+        updateCellStatus(nextGenGridLines, x, y, ".");
       }
     }else{
       if (neighboursCount == 3 ){
-        String newLine = nextGenGridLines.get(x).substring(0, y) + "*"  + nextGenGridLines.get(x).substring(y +1);
-        nextGenGridLines.set(x, newLine);
+        updateCellStatus(nextGenGridLines, x, y, "*");
       }
     }
+  }
+
+  private static void updateCellStatus(ArrayList<String> nextGenGridLines, int x, int y, String x1) {
+    String newLine = nextGenGridLines.get(x).substring(0, y) + x1 + nextGenGridLines.get(x).substring(y + 1);
+    nextGenGridLines.set(x, newLine);
+  }
+
+  private static boolean hasTooManyNeighbours(int neighboursCount) {
+    return neighboursCount > 3;
+  }
+
+  private static boolean hasTooFewNeighbours(int neighboursCount) {
+    return neighboursCount < 2;
+  }
+
+  private boolean cellIsAlive(int x, int y) {
+    return gridLines.get(x).charAt(y) == '*';
   }
 
   private int getNeighboursCount(int x, int y, int neighboursCount) {
@@ -75,7 +90,7 @@ public class Grid {
       for(int j = y-1; j<=y+1; j++){
         if(!(i == x && j == y)){
           neighboursCount = neighboursCount + (isCellAliveAt(i, j) ? 1 : 0);
-          if(neighboursCount >3){
+          if(hasTooManyNeighbours(neighboursCount)){
             break;
           }
         }
