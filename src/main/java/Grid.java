@@ -1,6 +1,27 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Grid {
+
+  private static final int MAX_TURNS = 5;
+
+
+  public static void main (String[] args) throws Exception {
+    ArrayList<String> initialGridLines = new ArrayList<>();
+    initialGridLines.add(".*.");
+    initialGridLines.add("*.*");
+    initialGridLines.add(".**");
+    Grid initialGrid = new Grid(initialGridLines);
+
+    Scanner input = new Scanner(System.in);
+    int i = 0;
+    while (i<10){
+      initialGrid.print();
+      initialGrid.nextMove();
+      input.nextLine();
+      i++;
+    }
+  }
 
   private ArrayList<String> gridLines;
 
@@ -50,21 +71,13 @@ public class Grid {
 
   private int getNeighboursCount(int x, int y, int neighboursCount) {
 
-    int upperRowIndex = x -1;
-    neighboursCount = neighboursCount + (isCellAliveAt(upperRowIndex, y - 1) ? 1 : 0);
-    neighboursCount = neighboursCount + (isCellAliveAt(upperRowIndex, y) ? 1 : 0);
-    neighboursCount = neighboursCount + (isCellAliveAt(upperRowIndex, y + 1) ? 1 : 0);
-
-    //Middle row
-    upperRowIndex = x;
-    neighboursCount = neighboursCount + (isCellAliveAt(upperRowIndex, y - 1) ? 1 : 0);
-    neighboursCount = neighboursCount + (isCellAliveAt(upperRowIndex, y + 1) ? 1 : 0);
-
-    //Bottom row
-    upperRowIndex = x +1;
-    neighboursCount = neighboursCount + (isCellAliveAt(upperRowIndex, y -1) ? 1 : 0);
-    neighboursCount = neighboursCount + (isCellAliveAt(upperRowIndex, y) ? 1 : 0);
-    neighboursCount = neighboursCount + (isCellAliveAt(upperRowIndex, y +1) ? 1 : 0);
+    for(int i = x-1; i<=x+1; i++){
+      for(int j = y-1; j<=y+1; j++){
+        if(!(i == x && j == y)){
+          neighboursCount = neighboursCount + (isCellAliveAt(i, j) ? 1 : 0);
+        }
+      }
+    }
     return neighboursCount;
   }
 
