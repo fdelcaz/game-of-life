@@ -75,6 +75,9 @@ public class Grid {
       for(int j = y-1; j<=y+1; j++){
         if(!(i == x && j == y)){
           neighboursCount = neighboursCount + (isCellAliveAt(i, j) ? 1 : 0);
+          if(neighboursCount >3){
+            break;
+          }
         }
       }
     }
