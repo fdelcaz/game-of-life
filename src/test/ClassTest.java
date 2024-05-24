@@ -69,7 +69,6 @@ public class ClassTest {
     assertEquals(expectedGrid.getGridLines(),initialGrid.getGridLines());
   }
 
-  @Disabled("Disabled as this is too complex. I prefer to start considering a few alive cells instead of a few dead ones")
   @Test
   public void checkCellDiesFromOverPopulationInThreeByThreeGrid() throws Exception {
     ArrayList<String> initialGridLines = new ArrayList<>();
@@ -79,8 +78,8 @@ public class ClassTest {
     Grid initialGrid = new Grid(initialGridLines);
 
     ArrayList<String> expectedGridLines = new ArrayList<>();
-    expectedGridLines.add("..*");
     expectedGridLines.add("*.*");
+    expectedGridLines.add("...");
     expectedGridLines.add("*.*");
     Grid expectedGrid = new Grid(expectedGridLines);
 
