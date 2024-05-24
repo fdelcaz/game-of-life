@@ -1,4 +1,5 @@
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -88,16 +89,17 @@ public class ClassTest {
 
   static Stream<TestData> provideTestData() {
     return Stream.of(
-      new TestData(List.of("...", "...", "..."), List.of("...", "...", "...")),
-      new TestData(List.of("...", ".*.", "..."), List.of("...", "...", "...")),
-      new TestData(List.of("...", "***", "..."), List.of(".*.", ".*.", ".*.")),
-      new TestData(List.of(".*.", "***", ".*."), List.of("***", "*.*", "***")),
-      new TestData(List.of(".*.", "*.*", "..."), List.of(".*.", ".*.", "..."))
+      new TestData("cannotHaveAliveCellsIfThereWereNoAliveOnes", List.of("...", "...", "..."), List.of("...", "...", "...")),
+      new TestData("aSingleAliveCellWilLDie", List.of("...", ".*.", "..."), List.of("...", "...", "...")),
+      new TestData("aSingleAliveCellWithTwoNeighboursSurvives", List.of("...", "***", "..."), List.of(".*.", ".*.", ".*.")),
+      new TestData("aCellWithMoreThanThreeNeighboursDies", List.of(".*.", "***", ".*."), List.of("***", "*.*", "***")),
+      new TestData("aDeadCellWithThreeAliveNeighboursBecomesAlive", List.of(".*.", "*.*", "..."), List.of(".*.", ".*.", "..."))
     );
   }
 
-  @ParameterizedTest
+  @ParameterizedTest(name = "{0}")
   @MethodSource("provideTestData")
+  @DisplayName("Test Grid Configuration")
   public void testGrid(TestData data) throws Exception {
     Grid initialGrid = new Grid(new ArrayList<>(data.initialGridLines));
     initialGrid.nextMove();
@@ -105,13 +107,20 @@ public class ClassTest {
     assertEquals(expectedGrid.getGridLines(), initialGrid.getGridLines());
   }
 
-  private static class TestData {
+  static class TestData {
+    String testName;
     List<String> initialGridLines;
     List<String> expectedGridLines;
 
-    TestData(List<String> initialGridLines, List<String> expectedGridLines) {
+    TestData(String testName, List<String> initialGridLines, List<String> expectedGridLines) {
+      this.testName = testName;
       this.initialGridLines = initialGridLines;
       this.expectedGridLines = expectedGridLines;
+    }
+
+    @Override
+    public String toString() {
+      return testName;
     }
   }
 }
