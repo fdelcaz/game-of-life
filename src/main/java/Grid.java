@@ -3,8 +3,8 @@ import java.util.Scanner;
 
 public class Grid {
 
-  private static final int MAX_TURNS = 5;
-
+  public static final String DEAD_CELL = ".";
+  public static final String ALIVE_CELL = "*";
 
   public static void main(String[] args) throws Exception {
     ArrayList<String> initialGridLines = new ArrayList<>();
@@ -58,11 +58,11 @@ public class Grid {
 
     if (cellIsAlive(x, y)) {
       if (hasTooFewNeighbours(neighboursCount) || hasTooManyNeighbours(neighboursCount)) {
-        updateCellStatus(nextGenGridLines, x, y, ".");
+        updateCellStatus(nextGenGridLines, x, y, DEAD_CELL);
       }
     } else {
       if (neighboursCount == 3) {
-        updateCellStatus(nextGenGridLines, x, y, "*");
+        updateCellStatus(nextGenGridLines, x, y, ALIVE_CELL);
       }
     }
   }
@@ -82,7 +82,7 @@ public class Grid {
 
   private boolean cellIsAlive(int x, int y) {
     try {
-      return gridLines.get(x).charAt(y) == '*';
+      return String.valueOf(gridLines.get(x).charAt(y)).equals(ALIVE_CELL);
     } catch (Exception e) { //Out of boundaries
       return false;
     }
