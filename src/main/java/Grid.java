@@ -6,7 +6,7 @@ public class Grid {
   private static final int MAX_TURNS = 5;
 
 
-  public static void main (String[] args) throws Exception {
+  public static void main(String[] args) throws Exception {
     ArrayList<String> initialGridLines = new ArrayList<>();
     initialGridLines.add(".*.");
     initialGridLines.add("*.*");
@@ -15,7 +15,7 @@ public class Grid {
 
     Scanner input = new Scanner(System.in);
     int i = 0;
-    while (i<10){
+    while (i < 10) {
       initialGrid.print();
       initialGrid.nextMove();
       input.nextLine();
@@ -34,7 +34,7 @@ public class Grid {
   }
 
   public Grid(ArrayList<String> gridLines) throws Exception {
-    if (gridLines.get(0).length() < 2){
+    if (gridLines.get(0).length() < 2) {
       throw new Exception("Invalid grid size");
     }
     this.gridLines = gridLines;
@@ -43,8 +43,8 @@ public class Grid {
   public void nextMove() {
     ArrayList<String> nextGenGridLines = new ArrayList<>(gridLines);
 
-    for (int x = 0; x<gridLines.size(); x++) {
-      for (int y = 0; y<gridLines.size(); y++) {
+    for (int x = 0; x < gridLines.size(); x++) {
+      for (int y = 0; y < gridLines.size(); y++) {
         getNextGenLines(x, y, nextGenGridLines);
       }
     }
@@ -56,12 +56,12 @@ public class Grid {
     int neighboursCount = 0;
     neighboursCount = getNeighboursCount(x, y, neighboursCount);
 
-    if (cellIsAlive(x, y)){
-      if (hasTooFewNeighbours(neighboursCount) || hasTooManyNeighbours(neighboursCount)){
+    if (cellIsAlive(x, y)) {
+      if (hasTooFewNeighbours(neighboursCount) || hasTooManyNeighbours(neighboursCount)) {
         updateCellStatus(nextGenGridLines, x, y, ".");
       }
-    }else{
-      if (neighboursCount == 3 ){
+    } else {
+      if (neighboursCount == 3) {
         updateCellStatus(nextGenGridLines, x, y, "*");
       }
     }
@@ -81,32 +81,26 @@ public class Grid {
   }
 
   private boolean cellIsAlive(int x, int y) {
-    return gridLines.get(x).charAt(y) == '*';
+    try {
+      return gridLines.get(x).charAt(y) == '*';
+    } catch (Exception e) { //Out of boundaries
+      return false;
+    }
   }
 
   private int getNeighboursCount(int x, int y, int neighboursCount) {
 
-    for(int i = x-1; i<=x+1; i++){
-      for(int j = y-1; j<=y+1; j++){
-        if(!(i == x && j == y)){
-          neighboursCount = neighboursCount + (isCellAliveAt(i, j) ? 1 : 0);
-          if(hasTooManyNeighbours(neighboursCount)){
+    for (int i = x - 1; i <= x + 1; i++) {
+      for (int j = y - 1; j <= y + 1; j++) {
+        if (!(i == x && j == y)) {
+          neighboursCount = neighboursCount + (cellIsAlive(i, j) ? 1 : 0);
+          if (hasTooManyNeighbours(neighboursCount)) {
             break;
           }
         }
       }
     }
     return neighboursCount;
-  }
-
-  private boolean isCellAliveAt(int x, int y) {
-    try{
-      char neighbour = gridLines.get(x).charAt(y);
-      return neighbour == '*';
-    }catch (Exception e){ //Out of boundaries
-      return false;
-    }
-
   }
 
   public void print() {
